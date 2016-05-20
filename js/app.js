@@ -12,25 +12,39 @@
 // Bonus 3: Allow user to input expressions directly to the screen
 
 var $screen = $('#screen');
+var $buttons = $('span');
+var divide = $('.operator').eq(1).text();
+var multiply = $('.operator').eq(2).text();
+var subtract = $('.operator').eq(3).text();
+var addition = $('.operator').eq(4).text();
+var result = '';
 
-var pressButton = function() {
+$buttons.click(function(event) {
 
-    // Guard statement
-    if ($screen.text() === 'Error') {
-        return;
-
-    } else {
-        // Add event listeners to all span tags
-        var $buttons = $('span');
-        $buttons.click(function(event) {
-          if ($(event.target).text() === 'C') {
-            return $screen.text('');
-          }
-          var $addToScreen = $(event.target).text();
-          $screen.append($addToScreen);
-
-        });
+  if ($(event.target).text() === 'C') {
+    return $screen.text('');
+  } else if ($(event.target).text() === 'x') {
+    return $screen.append('*');
+  } else if ($(event.target).text() === '÷') {
+    return $screen.append('/');
+  } else if ($(event.target).text() === '=') {
+      try {
+        result = eval($screen.text());
+      }
+      catch (e) {
+        return $screen.text('Error');
+      }
+    if (result === Infinity || $screen.text().startsWith('/')) {
+      return $screen.text('Error');
     }
-};
+    return $screen.text(result);
+  }
 
-pressButton();
+  var $addToScreen = $(event.target).text();
+    if ($screen.text() === 'Error') {
+      return;
+    } else {
+      $screen.append($addToScreen);
+    }
+
+});
